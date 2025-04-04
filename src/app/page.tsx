@@ -218,17 +218,7 @@ export default function HomePage() {
       </section>
 
       {/* Price Chart */}
-      <section className={`${themeClasses.card} p-5 rounded-2xl shadow-lg`}>
-        <h2 className="text-xl font-semibold mb-4">Bitcoin Price Trend (24h)</h2>
-        <div className="h-64 w-full">
-          {/* The Line component would normally be wrapped in a LineChart component */}
-          {/* This is a placeholder for visualization purposes */}
-          <div className="h-full w-full bg-gray-700 rounded-lg flex items-center justify-center">
-            <p>Interactive BTC price chart would render here</p>
-            <Line type="monotone" dataKey="btc" stroke="#8884d8" />
-          </div>
-        </div>
-      </section>
+      
 
       {/* Main Dashboard Grid */}
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
