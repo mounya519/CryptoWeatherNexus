@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -8,6 +8,7 @@
     "noEmit": true,
     "esModuleInterop": true,
     "types": ["react", "react-dom"],
+    
     "module": "esnext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
