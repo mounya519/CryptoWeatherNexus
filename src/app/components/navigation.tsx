@@ -3,19 +3,20 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FiHome, FiCloud, FiDollarSign, FiGlobe, FiMenu, FiX } from 'react-icons/fi';
-import { motion, AnimatePresence } from 'framer-motion';
+import { FiHome, FiCloud, FiDollarSign, FiGlobe,  } from 'react-icons/fi';
+import { motion,  } from 'framer-motion';
 
 const Navigation = () => {
   const pathname = usePathname();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const [timeString, setTimeString] = useState('');
 
   // Function to check if a link is active
-  const isActive = (path) => {
+  // Function to check if a link is active
+const isActive = (path: string) => {
     return pathname === path;
   };
-
+  
   // Update time every second
   useEffect(() => {
     const updateTime = () => {
@@ -44,7 +45,7 @@ const Navigation = () => {
 
   const navItemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: (i) => ({ 
+    visible: (i:number) => ({ 
       opacity: 1, 
       y: 0,
       transition: { 
@@ -54,25 +55,7 @@ const Navigation = () => {
     })
   };
 
-  const mobileMenuVariants = {
-    hidden: { opacity: 0, y: 100 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { 
-        type: "spring", 
-        stiffness: 300, 
-        damping: 28
-      }
-    },
-    exit: { 
-      opacity: 0, 
-      y: 100,
-      transition: { 
-        duration: 0.3 
-      }
-    }
-  };
+ 
 
   return (
     <div className="relative">

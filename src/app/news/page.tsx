@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
+
 import { 
   Search, Globe, Bookmark, Share2, Clock, 
   Newspaper, TrendingUp, Film, HeartPulse, 
@@ -12,13 +12,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function NewsPage() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [category, setCategory] = useState('top');
   const [language, setLanguage] = useState('en');
   const [searchQuery, setSearchQuery] = useState('');
-  const [savedArticles, setSavedArticles] = useState([]);
+  const [savedArticles, setSavedArticles] = useState<Article[]>([]);
   const [activeTab, setActiveTab] = useState('all');
-  const [expandedArticle, setExpandedArticle] = useState(null);
+  const [expandedArticle, setExpandedArticle] = useState<number | null>(null);
 
   const API_KEY = 'pub_78156b7370b86c7c44609acd69323a2e7b5a4';
   
@@ -78,20 +78,31 @@ export default function NewsPage() {
     { code: 'it', name: 'Italiano' }
   ];
 
-  const toggleSaveArticle = (article) => {
-    setSavedArticles(prev => {
-      const isSaved = prev.some(a => a.link === article.link);
-      return isSaved 
-        ? prev.filter(a => a.link !== article.link) 
-        : [...prev, article];
-    });
-  };
+interface Article {
+    link: string;
+    title: string;
+    description?: string;
+    content?: string;
+    image_url?: string;
+    source_id?: string;
+    pubDate: string;
+    category?: string[];
+}
 
-  const toggleExpandArticle = (index) => {
+const toggleSaveArticle = (article: Article): void => {
+    setSavedArticles((prev: Article[]) => {
+        const isSaved = prev.some((a: Article) => a.link === article.link);
+        return isSaved 
+            ? prev.filter((a: Article) => a.link !== article.link) 
+            : [...prev, article];
+    });
+};
+
+  const toggleExpandArticle = (index: number) => {
     setExpandedArticle(expandedArticle === index ? null : index);
   };
 
-  const shareArticle = async (article) => {
+  const shareArticle = async (article: Article) => {
     try {
       await navigator.share({
         title: article.title,

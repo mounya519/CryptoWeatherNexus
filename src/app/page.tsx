@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { Line } from "recharts";
+
 import { AlertCircle, TrendingUp, CloudRain, Sun, Wind, RefreshCw } from "lucide-react";
 
 export default function HomePage() {
@@ -12,13 +12,13 @@ export default function HomePage() {
   const [temperature, setTemperature] = useState("Loading...");
   const [weatherCondition, setWeatherCondition] = useState("Clear");
   const [loading, setLoading] = useState(true);
-  const [darkMode, setDarkMode] = useState(true);
-  const [chartData, setChartData] = useState([]);
-  const [selectedCity, setSelectedCity] = useState("New York");
-  const [alerts, setAlerts] = useState([]);
+  const [darkMode] = useState(true);
+  const [chartData, setChartData] = useState<{ time: string; btc: number }[]>([]);
+  const [selectedCity, setSelectedCity] = useState<keyof typeof weatherData>("New York");
+  const [alerts, setAlerts] = useState<{ id: number; message: string; time: string }[]>([]);
 
   // Weather data for different cities
-  const cities = ["New York", "London", "Tokyo", "Sydney"];
+  const cities: (keyof typeof weatherData)[] = ["New York", "London", "Tokyo", "Sydney"];
   const weatherData = {
     "New York": { temp: "18°C", condition: "Clear" },
     "London": { temp: "12°C", condition: "Rainy" },
@@ -88,7 +88,7 @@ export default function HomePage() {
   };
 
   // Update chart data with new values
-  const updateChartData = (newPrice) => {
+  const updateChartData = (newPrice: number) => {
     const newChartData = [...chartData.slice(1), {
       time: `${new Date().getHours()}:${new Date().getMinutes().toString().padStart(2, '0')}`,
       btc: newPrice
@@ -116,14 +116,11 @@ export default function HomePage() {
   };
 
   // Handle city selection
-  const handleCityChange = (city) => {
-    setSelectedCity(city);
+  const handleCityChange = (city: keyof typeof weatherData) => {
+      setSelectedCity(city);
   };
 
-  // Toggle dark/light mode
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
-  };
+ 
 
   // Manual refresh function
   const handleRefresh = () => {
@@ -135,7 +132,7 @@ export default function HomePage() {
   };
 
   // Get weather icon based on condition
-  const getWeatherIcon = (condition) => {
+  const getWeatherIcon = (condition: string) => {
     switch (condition.toLowerCase()) {
       case 'rainy':
         return <CloudRain size={24} className="text-blue-400" />;

@@ -2,16 +2,31 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUp, ArrowDown, Loader2, LineChart, DollarSign, TrendingUp, Star, RefreshCw } from 'lucide-react';
+import { ArrowUp, ArrowDown, Loader2, Star, RefreshCw } from 'lucide-react';
 
 const CryptoPage = () => {
     const mainCryptos = ['bitcoin', 'ethereum', 'cardano'];
-    const [cryptos, setCryptos] = useState([]);
+    interface Crypto {
+        id: string;
+        name: string;
+        symbol: string;
+        image: string;
+        current_price: number;
+        market_cap: number;
+        market_cap_rank: number;
+        total_volume: number;
+        high_24h: number;
+        low_24h: number;
+        price_change_percentage_24h: number;
+        circulating_supply: number;
+    }
+
+    const [cryptos, setCryptos] = useState<Crypto[]>([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [selectedCryptoId, setSelectedCryptoId] = useState(null);
+    const [error, setError] = useState<string | null>(null);
+    const [selectedCryptoId, setSelectedCryptoId] = useState<string | null>(null);
     const [lastUpdated, setLastUpdated] = useState('');
-    const [favorites, setFavorites] = useState([]);
+    const [favorites, setFavorites] = useState<string[]>([]);
 
     useEffect(() => {
         fetchCryptoData();
@@ -30,22 +45,22 @@ const CryptoPage = () => {
                 setLoading(false);
                 setLastUpdated(new Date().toLocaleTimeString());
             })
-            .catch(err => {
+            .catch(() => {
                 setError('Failed to fetch crypto data.');
                 setLoading(false);
             });
     };
 
-    const formatMarketCap = (cap) => cap >= 1e12 ? `$${(cap / 1e12).toFixed(2)}T` : cap >= 1e9 ? `$${(cap / 1e9).toFixed(2)}B` : cap >= 1e6 ? `$${(cap / 1e6).toFixed(2)}M` : `$${cap.toLocaleString()}`;
-    const getChangeColor = (change) => change >= 0 ? 'text-green-600' : 'text-red-600';
-    const getMainCryptos = () => cryptos.filter(c => mainCryptos.includes(c.id));
+    const formatMarketCap = (cap: number): string => cap >= 1e12 ? `$${(cap / 1e12).toFixed(2)}T` : cap >= 1e9 ? `$${(cap / 1e9).toFixed(2)}B` : cap >= 1e6 ? `$${(cap / 1e6).toFixed(2)}M` : `$${cap.toLocaleString()}`;
+    const getChangeColor = (change: number): string => change >= 0 ? 'text-green-600' : 'text-red-600';
+    const getMainCryptos = () => cryptos.filter((c: { id: string }) => mainCryptos.includes(c.id));
 
-    const toggleDetails = (id) => setSelectedCryptoId(selectedCryptoId === id ? null : id);
-    const toggleFavorite = (id) => setFavorites(prev => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]);
+    const toggleDetails = (id: string | null) => setSelectedCryptoId(selectedCryptoId === id ? null : id);
+    const toggleFavorite = (id: string) => setFavorites((prev: string[]) => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]);
 
     const cardVariants = {
         hidden: { opacity: 0, y: 20 },
-        visible: i => ({ opacity: 1, y: 0, transition: { delay: i * 0.1, duration: 0.5, type: "spring", stiffness: 100 }})
+        visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.1, duration: 0.5, type: "spring", stiffness: 100 }})
     };
 
     if (loading) return <div className="flex flex-col items-center justify-center h-64"><Loader2 className="animate-spin w-8 h-8 text-blue-600 mb-2" /><p>Loading...</p></div>;

@@ -6,7 +6,7 @@ import {
   MapPin, Sun, CloudRain, CloudSnow, Cloud, 
   Droplets, Wind, Gauge, Loader2, ChevronDown, 
   ChevronUp, RefreshCw, Search, Thermometer,
-  Sunset, Sunrise, Eye, Navigation, X
+  Sunset, Sunrise, Eye, X
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -73,7 +73,7 @@ const WeatherInfo = () => {
       setWeatherData(results.map(res => res.data));
       setLastUpdated(new Date().toLocaleTimeString());
       setLoading(false);
-    } catch (err) {
+    } catch {
       setError("Failed to fetch weather data");
       setLoading(false);
     }
@@ -93,7 +93,7 @@ const WeatherInfo = () => {
       );
       setSearchedCity(response.data);
       setIsSearching(false);
-    } catch (err) {
+    } catch {
       setError("City not found. Please try another location.");
       setIsSearching(false);
       setSearchedCity(null);
