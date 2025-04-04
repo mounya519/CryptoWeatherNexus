@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 import { 
   Search, Globe, Bookmark, Share2, Clock, 
@@ -10,7 +11,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function NewsPage() {
-  const [news, setNews] = useState([]);
+  const [news, setNews] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [category, setCategory] = useState('top');
@@ -121,7 +122,7 @@ const toggleSaveArticle = (article: Article): void => {
     ? savedArticles 
     : news.filter(article => 
         activeTab === 'all' || 
-        (article.category && article.category.includes(activeTab))
+        (article.category && article.category.includes(activeTab as string))
       );
 
   return (
@@ -260,13 +261,13 @@ const toggleSaveArticle = (article: Article): void => {
                 <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
                   {article.image_url ? (
                     <div className="relative h-48 overflow-hidden">
-                      <img 
+                      <Image 
                         src={article.image_url} 
                         alt={article.title || 'News image'} 
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = 'https://via.placeholder.com/600x400?text=No+Image';
+                          (e.target as HTMLImageElement).onerror = null;
+                          (e.target as HTMLImageElement).src = 'https://via.placeholder.com/600x400?text=No+Image';
                         }}
                       />
                       <div className="absolute top-2 right-2 flex gap-1">

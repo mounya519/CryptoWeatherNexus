@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp, ArrowDown, Loader2, Star, RefreshCw } from 'lucide-react';
 
@@ -99,7 +101,8 @@ const CryptoPage = () => {
                             </button>
                             <div className="flex justify-between items-center mb-3">
                                 <div className="flex items-center gap-2">
-                                    <img src={crypto.image} alt={crypto.name} className="w-8 h-8" />
+                                   <Image src={crypto.image} alt={crypto.name} width={32} height={32} className="w-8 h-8" />
+
                                     <div>
                                         <h2 className="font-semibold text-gray-900 text-lg">{crypto.name}</h2>
                                         <p className="text-xs uppercase text-gray-500">{crypto.symbol}</p>
@@ -157,7 +160,7 @@ const CryptoPage = () => {
                                 <motion.tr key={crypto.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.05 * index }} whileHover={{ backgroundColor: '#f9fafb' }} className="border-b">
                                     <td className="p-3 text-black">{crypto.market_cap_rank}</td>
                                     <td className="p-3 flex items-center gap-2 text-black">
-                                        <img src={crypto.image} alt={crypto.name} className="w-5 h-5" />
+                                        <Image src={crypto.image} alt={crypto.name} className="w-5 h-5" />
                                         <span>{crypto.name}</span>
                                         <span className="text-xs text-gray-400 uppercase">{crypto.symbol}</span>
                                     </td>

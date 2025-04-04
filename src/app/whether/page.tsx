@@ -153,7 +153,7 @@ const WeatherInfo = () => {
 
   useEffect(() => {
     fetchAllWeather();
-  }, [selectedUnit]);
+  });
 
   if (loading && !searchedCity) {
     return (
