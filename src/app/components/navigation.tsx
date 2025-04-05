@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FiHome, FiCloud, FiDollarSign, FiGlobe, FiAirplay  } from 'react-icons/fi';
-import { FaBuilding } from 'react-icons/fa';
+
 import { motion,  } from 'framer-motion';
 
 const Navigation = () => {
