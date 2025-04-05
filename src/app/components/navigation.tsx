@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FiHome, FiCloud, FiDollarSign, FiGlobe,  } from 'react-icons/fi';
+import Image from 'next/image';
 import { motion,  } from 'framer-motion';
 
 const Navigation = () => {
@@ -73,15 +74,15 @@ const isActive = (path: string) => {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5 }}
         >
-          <div className="bg-white text-indigo-800 p-2 rounded-lg mr-3">
+          <div className="bg-white text-indigo-800 p-2 rounded-full mr-3">
             <motion.div
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.6 }}
             >
-              <FiCloud size={24} />
+             <img src="https://res.cloudinary.com/dky72aehn/image/upload/v1743848799/hail_4273875_gsnohb.png" alt="image" width={50} height={50} />
             </motion.div>
           </div>
-          <h2 className="text-xl font-bold">WeatherCrypto</h2>
+          <h2 className="text-xl font-bold">CryptoWeather Nexus</h2>
         </motion.div>
         
         <ul className="space-y-2 flex-1">
@@ -136,12 +137,7 @@ const isActive = (path: string) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
         >
-          <motion.div 
-            className="p-3 bg-indigo-700/50 rounded-lg text-sm backdrop-blur-sm"
-            whileHover={{ backgroundColor: 'rgba(79, 70, 229, 0.7)' }}
-          >
-            <p>Last updated: {timeString}</p>
-          </motion.div>
+        
         </motion.div>
       </motion.nav>
 
