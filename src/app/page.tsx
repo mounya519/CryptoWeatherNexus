@@ -251,7 +251,32 @@ export default function HomePage() {
           </motion.span> 
           CryptoWeather Nexus
         </motion.h1>
-       
+        <motion.div className="flex items-center gap-4" variants={itemVariants}>
+          <motion.button 
+            whileHover="hover"
+            whileTap="tap"
+            variants={buttonVariants}
+            onClick={toggleTheme} 
+            className={`p-2 rounded-full ${themeClasses.pillButton}`}
+            title="Toggle Theme"
+          >
+            {darkMode ? <SunMedium size={20} /> : <Moon size={20} />}
+          </motion.button>
+          
+          <motion.button 
+            whileHover="hover"
+            whileTap="tap"
+            variants={buttonVariants}
+            onClick={handleRefresh} 
+            className={`p-2 rounded-full ${themeClasses.pillButton}`}
+            title="Refresh Data"
+          >
+            <RefreshCw 
+              size={20} 
+              className={loading ? "animate-spin" : ""} 
+            />
+          </motion.button>
+        </motion.div>
       </motion.header>
 
       {/* Hero Section */}
