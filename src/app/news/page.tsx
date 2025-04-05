@@ -1,5 +1,5 @@
 "use client";
-
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 import { 
@@ -10,15 +10,15 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function NewsPage() {
-  const [news, setNews] = useState([]);
+  const [news, setNews] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [category, setCategory] = useState('top');
   const [language, setLanguage] = useState('en');
   const [searchQuery, setSearchQuery] = useState('');
-  const [savedArticles, setSavedArticles] = useState([]);
+  const [savedArticles, setSavedArticles] = useState<Article[]>([]);
   const [activeTab, setActiveTab] = useState('all');
-  const [expandedArticle, setExpandedArticle] = useState(null);
+  const [expandedArticle, setExpandedArticle] = useState<number | null>(null);
 
   const API_KEY = 'pub_78156b7370b86c7c44609acd69323a2e7b5a4';
   
@@ -78,7 +78,13 @@ export default function NewsPage() {
     { code: 'it', name: 'Italiano' }
   ];
 
-  const toggleSaveArticle = (article) => {
+  interface Article {
+    link: string;
+    category?: string; // Add the category property
+    [key: string]: string | number | boolean | null | undefined; // Add other properties as needed
+  }
+
+  const toggleSaveArticle = (article: Article) => {
     setSavedArticles(prev => {
       const isSaved = prev.some(a => a.link === article.link);
       return isSaved 
@@ -87,15 +93,15 @@ export default function NewsPage() {
     });
   };
 
-  const toggleExpandArticle = (index) => {
+  const toggleExpandArticle = (index: number) => {
     setExpandedArticle(expandedArticle === index ? null : index);
   };
 
-  const shareArticle = async (article) => {
+  const shareArticle = async (article: Article) => {
     try {
       await navigator.share({
-        title: article.title,
-        text: article.description,
+        title: typeof article.title === 'string' ? article.title : undefined,
+        text: typeof article.description === 'string' ? article.description : undefined,
         url: article.link
       });
     } catch (err) {
@@ -108,7 +114,7 @@ export default function NewsPage() {
 
   const filteredNews = activeTab === 'saved' 
     ? savedArticles 
-    : news.filter(article => 
+    : news.filter((article: Article) => 
         activeTab === 'all' || 
         (article.category && article.category.includes(activeTab))
       );
@@ -249,15 +255,16 @@ export default function NewsPage() {
                 <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
                   {article.image_url ? (
                     <div className="relative h-48 overflow-hidden">
-                      <img 
-                        src={article.image_url} 
-                        alt={article.title || 'News image'} 
-                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = 'https://via.placeholder.com/600x400?text=No+Image';
-                        }}
-                      />
+
+
+<img
+  src={typeof article.image_url === 'string' ? article.image_url : 'https://via.placeholder.com/600x400?text=No+Image'}
+  alt={typeof article.title === 'string' ? article.title : 'News image'}
+  width={600}
+  height={400}
+  className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+/>
+
                       <div className="absolute top-2 right-2 flex gap-1">
                         <button
                           onClick={() => toggleSaveArticle(article)}
@@ -286,7 +293,7 @@ export default function NewsPage() {
                       </span>
                       <span className="text-xs text-gray-500 flex items-center gap-1">
                         <Clock size={14} />
-                        {new Date(article.pubDate).toLocaleDateString()}
+                        {typeof article.pubDate === 'string' || typeof article.pubDate === 'number' ? new Date(article.pubDate).toLocaleDateString() : 'Unknown date'}
                       </span>
                     </div>
                     
@@ -311,7 +318,7 @@ export default function NewsPage() {
                           </p>
                           {article.content && (
                             <p className="text-gray-500 text-sm">
-                              {article.content.substring(0, 200)}...
+                              {typeof article.content === 'string' ? article.content.substring(0, 200) : ''}...
                             </p>
                           )}
                         </motion.div>
