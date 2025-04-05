@@ -60,7 +60,7 @@ const CryptoPage = () => {
     const getChangeColor = (change: number): string => 
         change >= 0 ? 'text-green-600' : 'text-red-600';
     
-    const getMainCryptos = (): Array<{ id: string; [key: string]: any }> => 
+    const getMainCryptos = (): Array<Crypto> => 
         cryptos.filter((c) => mainCryptos.includes(c.id));
     
     const toggleDetails = (id: string): void => 
