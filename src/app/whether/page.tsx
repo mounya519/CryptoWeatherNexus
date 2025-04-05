@@ -326,7 +326,7 @@ const CityWeatherCard = ({
   selectedUnit: string;
   formatTime: (timestamp: number, timezone: number) => string;
   getWindDirection: (degrees: number) => string;
-  getWeatherIcon: (condition: string) => JSX.Element;
+  getWeatherIcon: (condition: string) => ReactElement;
 }) => {
   return (
     <motion.div
