@@ -93,7 +93,7 @@ const WeatherInfo = () => {
       );
       setSearchedCity(response.data);
       setIsSearching(false);
-    } catch (err) {
+    } catch {
       setError("City not found. Please try another location.");
       setIsSearching(false);
       setSearchedCity(null);
