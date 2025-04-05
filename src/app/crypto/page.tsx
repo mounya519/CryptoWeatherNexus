@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
-
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp, ArrowDown, Loader2, Star, RefreshCw } from 'lucide-react';
 
@@ -23,7 +21,7 @@ const CryptoPage = () => {
         circulating_supply: number;
     }
 
-    const [cryptos, setCryptos] = useState<Crypto[]>([]);
+    const [cryptos, setCryptos] = useState<Array<Crypto>>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedCryptoId, setSelectedCryptoId] = useState<string | null>(null);
@@ -53,16 +51,31 @@ const CryptoPage = () => {
             });
     };
 
-    const formatMarketCap = (cap: number): string => cap >= 1e12 ? `$${(cap / 1e12).toFixed(2)}T` : cap >= 1e9 ? `$${(cap / 1e9).toFixed(2)}B` : cap >= 1e6 ? `$${(cap / 1e6).toFixed(2)}M` : `$${cap.toLocaleString()}`;
-    const getChangeColor = (change: number): string => change >= 0 ? 'text-green-600' : 'text-red-600';
-    const getMainCryptos = () => cryptos.filter((c: { id: string }) => mainCryptos.includes(c.id));
-
-    const toggleDetails = (id: string | null) => setSelectedCryptoId(selectedCryptoId === id ? null : id);
-    const toggleFavorite = (id: string) => setFavorites((prev: string[]) => prev.includes(id) ? prev.filter(f => f !== id) : [...prev, id]);
-
+    const formatMarketCap = (cap: number): string => 
+        cap >= 1e12 ? `$${(cap / 1e12).toFixed(2)}T` : 
+        cap >= 1e9 ? `$${(cap / 1e9).toFixed(2)}B` : 
+        cap >= 1e6 ? `$${(cap / 1e6).toFixed(2)}M` : 
+        `$${cap.toLocaleString()}`;
+    
+    const getChangeColor = (change: number): string => 
+        change >= 0 ? 'text-green-600' : 'text-red-600';
+    
+    const getMainCryptos = (): Array<{ id: string; [key: string]: any }> => 
+        cryptos.filter((c) => mainCryptos.includes(c.id));
+    
+    const toggleDetails = (id: string): void => 
+        setSelectedCryptoId(selectedCryptoId === id ? null : id);
+    
+    const toggleFavorite = (id: string): void => 
+        setFavorites((prev) => prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]);
+    
     const cardVariants = {
         hidden: { opacity: 0, y: 20 },
-        visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.1, duration: 0.5, type: "spring", stiffness: 100 }})
+        visible: (i: number) => ({ 
+            opacity: 1, 
+            y: 0, 
+            transition: { delay: i * 0.1, duration: 0.5, type: "spring", stiffness: 100 }
+        })
     };
 
     if (loading) return <div className="flex flex-col items-center justify-center h-64"><Loader2 className="animate-spin w-8 h-8 text-blue-600 mb-2" /><p>Loading...</p></div>;
@@ -101,8 +114,7 @@ const CryptoPage = () => {
                             </button>
                             <div className="flex justify-between items-center mb-3">
                                 <div className="flex items-center gap-2">
-                                   <Image src={crypto.image} alt={crypto.name} width={32} height={32} className="w-8 h-8" />
-
+                                    <img src={crypto.image} alt={crypto.name} className="w-8 h-8" />
                                     <div>
                                         <h2 className="font-semibold text-gray-900 text-lg">{crypto.name}</h2>
                                         <p className="text-xs uppercase text-gray-500">{crypto.symbol}</p>
@@ -160,7 +172,7 @@ const CryptoPage = () => {
                                 <motion.tr key={crypto.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.05 * index }} whileHover={{ backgroundColor: '#f9fafb' }} className="border-b">
                                     <td className="p-3 text-black">{crypto.market_cap_rank}</td>
                                     <td className="p-3 flex items-center gap-2 text-black">
-                                        <Image src={crypto.image} alt={crypto.name} className="w-5 h-5" />
+                                        <img src={crypto.image} alt={crypto.name} className="w-5 h-5" />
                                         <span>{crypto.name}</span>
                                         <span className="text-xs text-gray-400 uppercase">{crypto.symbol}</span>
                                     </td>
