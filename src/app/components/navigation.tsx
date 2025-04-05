@@ -1,15 +1,16 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FiHome, FiCloud, FiDollarSign, FiGlobe,  } from 'react-icons/fi';
+import { FiHome, FiCloud, FiDollarSign, FiGlobe, FiAirplay  } from 'react-icons/fi';
+import { FaBuilding } from 'react-icons/fa';
 import { motion,  } from 'framer-motion';
 
 const Navigation = () => {
   const pathname = usePathname();
 
-  const [timeString, setTimeString] = useState('');
+ 
 
   // Function to check if a link is active
   // Function to check if a link is active
@@ -18,16 +19,7 @@ const isActive = (path: string) => {
   };
   
   // Update time every second
-  useEffect(() => {
-    const updateTime = () => {
-      setTimeString(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    };
-    
-    updateTime(); // Initial call
-    const interval = setInterval(updateTime, 1000);
-    
-    return () => clearInterval(interval);
-  }, []);
+ 
 
   // Animation variants
   const sidebarVariants = {
@@ -78,7 +70,7 @@ const isActive = (path: string) => {
               whileHover={{ rotate: 360 }}
               transition={{ duration: 0.6 }}
             >
-              <FiCloud size={24} />
+              <FiAirplay   size={24} />
             </motion.div>
           </div>
           <h2 className="text-xl font-bold">CryptoWeather Nexus</h2>
@@ -136,12 +128,7 @@ const isActive = (path: string) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
         >
-          <motion.div 
-            className="p-3 bg-indigo-700/50 rounded-lg text-sm backdrop-blur-sm"
-            whileHover={{ backgroundColor: 'rgba(79, 70, 229, 0.7)' }}
-          >
-            <p>Last updated: {timeString}</p>
-          </motion.div>
+         
         </motion.div>
       </motion.nav>
 

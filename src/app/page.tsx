@@ -175,9 +175,9 @@ export default function HomePage() {
       {/* Header with Theme Toggle */}
       <header className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
         <h1 className={`text-3xl md:text-4xl font-bold ${themeClasses.accent} flex items-center`}>
-          <span className="mr-2">⚡</span> CryptoWeather Nexus
+          <span className="mr-2"></span> CryptoWeather Nexus
         </h1>
-        <div className="flex items-center gap-4">
+        <div className="flex justify-end items-center gap-4">
           <button 
             onClick={toggleTheme} 
             className={`p-2 rounded-full ${themeClasses.pillButton} transition-colors`}
