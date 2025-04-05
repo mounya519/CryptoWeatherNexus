@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { AlertCircle, TrendingUp, CloudRain, Sun, Wind, RefreshCw, Moon, SunMedium } from "lucide-react";
 
@@ -170,62 +171,179 @@ export default function HomePage() {
       : "bg-white hover:bg-gray-100 text-gray-800 shadow-sm",
   };
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { 
+        when: "beforeChildren",
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { 
+      y: 0, 
+      opacity: 1,
+      transition: { type: "spring", stiffness: 100 }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { scale: 0.95, opacity: 0 },
+    visible: { 
+      scale: 1, 
+      opacity: 1,
+      transition: { type: "spring", stiffness: 100 }
+    },
+    hover: { 
+      scale: 1.03,
+      boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+      transition: { type: "spring", stiffness: 400, damping: 10 }
+    }
+  };
+
+  const alertVariants = {
+    initial: { opacity: 0, height: 0, marginBottom: 0 },
+    animate: { 
+      opacity: 1, 
+      height: "auto", 
+      marginBottom: 12,
+      transition: { type: "spring", stiffness: 200, damping: 20 }
+    },
+    exit: { 
+      opacity: 0, 
+      height: 0, 
+      marginBottom: 0,
+      transition: { duration: 0.2 }
+    }
+  };
+
+  const themeToggleVariants = {
+    rotate: { rotate: 360, transition: { duration: 0.5 } }
+  };
+
   return (
-    <main className={`min-h-screen ${themeClasses.background} ${themeClasses.text} p-4 md:p-6 space-y-6 transition-colors duration-300`}>
+    <motion.main 
+      className={`min-h-screen ${themeClasses.background} ${themeClasses.text} p-4 md:p-6 space-y-6 transition-colors duration-300`}
+      initial="hidden"
+      animate="visible"
+      variants={containerVariants}
+    >
       {/* Header with Theme Toggle */}
-      <header className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
-        <h1 className={`text-3xl md:text-4xl font-bold ${themeClasses.accent} flex items-center`}>
+      <motion.header 
+        className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4"
+        variants={itemVariants}
+      >
+        <motion.h1 
+          className={`text-3xl md:text-4xl font-bold ${themeClasses.accent} flex items-center`}
+          initial={{ x: -20, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 100 }}
+        >
           <span className="mr-2"></span> CryptoWeather Nexus
-        </h1>
+        </motion.h1>
         <div className="flex justify-end items-center gap-4">
-          <button 
+          <motion.button 
             onClick={toggleTheme} 
             className={`p-2 rounded-full ${themeClasses.pillButton} transition-colors`}
             title="Toggle Theme"
+            whileTap={{ scale: 0.9 }}
+            animate={darkMode ? "rotate" : ""}
+            variants={themeToggleVariants}
           >
             {darkMode ? <SunMedium size={20} /> : <Moon size={20} />}
-          </button>
+          </motion.button>
           
-          <button 
+          <motion.button 
             onClick={handleRefresh} 
             className={`p-2 rounded-full ${themeClasses.pillButton} transition-colors`}
             title="Refresh Data"
+            whileTap={{ scale: 0.9 }}
+            whileHover={{ rotate: 180, transition: { duration: 0.3 } }}
           >
             <RefreshCw size={20} className={loading ? "animate-spin" : ""} />
-          </button>
+          </motion.button>
         </div>
-      </header>
+      </motion.header>
 
       {/* Hero Section */}
-      <section className="text-center space-y-4 mb-6">
-        <p className={`text-lg ${themeClasses.secondaryText}`}>
+      <motion.section 
+        className="text-center space-y-4 mb-6"
+        variants={itemVariants}
+      >
+        <motion.p 
+          className={`text-lg ${themeClasses.secondaryText}`}
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+        >
           Your all-in-one dashboard for real-time weather, cryptocurrency stats,
           and trending news!
-        </p>
-      </section>
+        </motion.p>
+      </motion.section>
 
       {/* Live Updates Banner with Animation */}
-      <section className={`${loading ? 'animate-pulse' : ''} ${themeClasses.gradient} rounded-xl p-4 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4 text-white`}>
+      <motion.section 
+        className={`${loading ? 'animate-pulse' : ''} ${themeClasses.gradient} rounded-xl p-4 shadow-lg flex flex-col md:flex-row justify-between items-center gap-4 text-white`}
+        variants={itemVariants}
+        animate={{ 
+          boxShadow: [
+            "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+            "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+            "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)"
+          ],
+          transition: { duration: 2, repeat: Infinity, repeatType: "reverse" }
+        }}
+      >
         <div className="flex items-center gap-4 w-full md:w-auto">
-          <div className="p-2 bg-white/10 rounded-lg">
+          <motion.div 
+            className="p-2 bg-white/10 rounded-lg"
+            whileHover={{ rotate: 10, scale: 1.1 }}
+          >
             <TrendingUp size={24} />
-          </div>
-          <span className="text-lg font-medium">Live BTC: {btcPrice} | ETH: {ethPrice}</span>
+          </motion.div>
+          <motion.span 
+            className="text-lg font-medium"
+            key={btcPrice + ethPrice}
+            initial={{ opacity: 0.7 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            Live BTC: {btcPrice} | ETH: {ethPrice}
+          </motion.span>
         </div>
         <div className="flex items-center gap-4 w-full md:w-auto">
-          <div className="p-2 bg-white/10 rounded-lg">
+          <motion.div 
+            className="p-2 bg-white/10 rounded-lg"
+            whileHover={{ rotate: 10, scale: 1.1 }}
+          >
             {getWeatherIcon(weatherCondition)}
-          </div>
-          <span className="text-lg font-medium">{selectedCity}: {temperature}</span>
+          </motion.div>
+          <motion.span 
+            className="text-lg font-medium"
+            key={temperature + selectedCity}
+            initial={{ opacity: 0.7 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            {selectedCity}: {temperature}
+          </motion.span>
         </div>
-      </section>
+      </motion.section>
 
       {/* City Selection */}
-      <section className={`${themeClasses.card} p-4 rounded-xl shadow-md border ${themeClasses.border}`}>
+      <motion.section 
+        className={`${themeClasses.card} p-4 rounded-xl shadow-md border ${themeClasses.border}`}
+        variants={itemVariants}
+      >
         <h3 className="text-lg font-medium mb-3">Select City:</h3>
         <div className="flex flex-wrap gap-2">
           {cities.map(city => (
-            <button
+            <motion.button
               key={city}
               onClick={() => handleCityChange(city)}
               className={`px-4 py-2 rounded-lg transition-colors ${
@@ -233,58 +351,107 @@ export default function HomePage() {
                   ? themeClasses.highlight + " text-white" 
                   : themeClasses.unselectedButton
               }`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              animate={selectedCity === city ? { y: [0, -5, 0] } : {}}
+              transition={{ duration: 0.2 }}
             >
               {city}
-            </button>
+            </motion.button>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* Main Dashboard Grid */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <motion.section 
+        className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        variants={containerVariants}
+      >
         {/* Weather Card */}
-        <div className={`${themeClasses.card} p-5 rounded-2xl shadow-lg hover:shadow-xl transition-all ${themeClasses.cardHover} border ${themeClasses.border}`}>
+        <motion.div 
+          className={`${themeClasses.card} p-5 rounded-2xl shadow-lg transition-all ${themeClasses.cardHover} border ${themeClasses.border}`}
+          variants={cardVariants}
+          whileHover="hover"
+        >
           <div className="flex justify-between items-start">
             <h2 className="text-xl font-semibold mb-2">Weather Summary</h2>
-            <div className={`p-2 rounded-full ${darkMode ? "bg-gray-700" : "bg-blue-50"}`}>
+            <motion.div 
+              className={`p-2 rounded-full ${darkMode ? "bg-gray-700" : "bg-blue-50"}`}
+              animate={{ rotate: [0, 10, -10, 0] }}
+              transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+            >
               {getWeatherIcon(weatherCondition)}
-            </div>
+            </motion.div>
           </div>
           <div className="mt-4 space-y-3">
-            <p className="text-2xl font-bold">{selectedCity}: {temperature}</p>
+            <motion.p 
+              className="text-2xl font-bold"
+              key={temperature + selectedCity}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              {selectedCity}: {temperature}
+            </motion.p>
             <div className="grid grid-cols-2 gap-2">
-              <div className={`p-2 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-100"}`}>
+              <motion.div 
+                className={`p-2 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-100"}`}
+                whileHover={{ scale: 1.05 }}
+              >
                 <p className="text-sm font-medium">Condition</p>
                 <p className={`${themeClasses.accent}`}>{weatherCondition}</p>
-              </div>
-              <div className={`p-2 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-100"}`}>
+              </motion.div>
+              <motion.div 
+                className={`p-2 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-100"}`}
+                whileHover={{ scale: 1.05 }}
+              >
                 <p className="text-sm font-medium">Humidity</p>
                 <p className={`${themeClasses.accent}`}>65%</p>
-              </div>
-              <div className={`p-2 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-100"}`}>
+              </motion.div>
+              <motion.div 
+                className={`p-2 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-100"}`}
+                whileHover={{ scale: 1.05 }}
+              >
                 <p className="text-sm font-medium">Wind</p>
                 <p className={`${themeClasses.accent}`}>8 km/h</p>
-              </div>
-              <div className={`p-2 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-100"}`}>
+              </motion.div>
+              <motion.div 
+                className={`p-2 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-100"}`}
+                whileHover={{ scale: 1.05 }}
+              >
                 <p className="text-sm font-medium">Visibility</p>
                 <p className={`${themeClasses.accent}`}>10 km</p>
-              </div>
+              </motion.div>
             </div>
           </div>
           <Link href="/whether">
-            <button className={`mt-6 px-4 py-3 ${themeClasses.button} rounded-lg text-white w-full font-medium transition-transform hover:scale-105`}>
+            <motion.button 
+              className={`mt-6 px-4 py-3 ${themeClasses.button} rounded-lg text-white w-full font-medium`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
               View Detailed Weather
-            </button>
+            </motion.button>
           </Link>
-        </div>
+        </motion.div>
 
         {/* Crypto Card */}
-        <div className={`${themeClasses.card} p-5 rounded-2xl shadow-lg hover:shadow-xl transition-all ${themeClasses.cardHover} border ${themeClasses.border}`}>
+        <motion.div 
+          className={`${themeClasses.card} p-5 rounded-2xl shadow-lg transition-all ${themeClasses.cardHover} border ${themeClasses.border}`}
+          variants={cardVariants}
+          whileHover="hover"
+        >
           <div className="flex justify-between items-start">
             <h2 className="text-xl font-semibold mb-2">Crypto Summary</h2>
-            <div className={`p-2 rounded-full ${darkMode ? "bg-gray-700" : "bg-blue-50"}`}>
+            <motion.div 
+              className={`p-2 rounded-full ${darkMode ? "bg-gray-700" : "bg-blue-50"}`}
+              animate={{ 
+                y: [0, -5, 0],
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
               <TrendingUp size={24} className={themeClasses.accent} />
-            </div>
+            </motion.div>
           </div>
           <div className="mt-4 space-y-3">
             {[
@@ -293,50 +460,105 @@ export default function HomePage() {
               { name: "Solana", value: "$130", change: "+5.2%" },
               { name: "Cardano", value: "$0.45", change: "+0.8%" }
             ].map((crypto, idx) => (
-              <div key={idx} className={`p-3 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-100"} flex justify-between items-center`}>
+              <motion.div 
+                key={idx} 
+                className={`p-3 rounded-lg ${darkMode ? "bg-gray-700" : "bg-gray-100"} flex justify-between items-center`}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                whileHover={{ scale: 1.02 }}
+              >
                 <span className="font-medium">{crypto.name}</span>
                 <div className="text-right">
-                  <span className="font-bold block">{crypto.value}</span>
-                  <span className={crypto.change.startsWith("+") ? "text-green-500" : "text-red-500"}>
+                  <motion.span 
+                    className="font-bold block"
+                    key={crypto.value}
+                    initial={{ opacity: 0.7 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {crypto.value}
+                  </motion.span>
+                  <motion.span 
+                    className={crypto.change.startsWith("+") ? "text-green-500" : "text-red-500"}
+                    animate={{ 
+                      scale: [1, 1.05, 1],
+                    }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                  >
                     {crypto.change}
-                  </span>
+                  </motion.span>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
           <Link href="/crypto">
-            <button className={`mt-6 px-4 py-3 ${themeClasses.button} rounded-lg text-white w-full font-medium transition-transform hover:scale-105`}>
+            <motion.button 
+              className={`mt-6 px-4 py-3 ${themeClasses.button} rounded-lg text-white w-full font-medium`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
               View Full Crypto Dashboard
-            </button>
+            </motion.button>
           </Link>
-        </div>
+        </motion.div>
 
         {/* News and Alerts Card */}
-        <div className={`${themeClasses.card} p-5 rounded-2xl shadow-lg hover:shadow-xl transition-all ${themeClasses.cardHover} border ${themeClasses.border}`}>
+        <motion.div 
+          className={`${themeClasses.card} p-5 rounded-2xl shadow-lg transition-all ${themeClasses.cardHover} border ${themeClasses.border}`}
+          variants={cardVariants}
+          whileHover="hover"
+        >
           <div className="flex justify-between items-start">
             <h2 className="text-xl font-semibold mb-2">Alerts & News</h2>
-            <div className={`p-2 rounded-full ${darkMode ? "bg-gray-700" : "bg-blue-50"}`}>
+            <motion.div 
+              className={`p-2 rounded-full ${darkMode ? "bg-gray-700" : "bg-blue-50"}`}
+              animate={{ 
+                scale: [1, 1.1, 1],
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
               <AlertCircle size={24} className={themeClasses.accent} />
-            </div>
+            </motion.div>
           </div>
           <div className="max-h-64 overflow-y-auto pr-2 mt-4">
-            {alerts.length > 0 ? (
-              <ul className="space-y-3">
-                {alerts.map((alert) => (
-                  <li key={alert.id} className={`p-3 ${themeClasses.alertBg} rounded-lg border-l-4 ${themeClasses.alertBorder} flex gap-2`}>
-                    <AlertCircle size={20} className="text-red-500 shrink-0 mt-1" />
-                    <div>
-                      <p className="text-sm">{alert.message}</p>
-                      <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"} mt-1`}>{alert.time}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className={`${darkMode ? "text-gray-400" : "text-gray-500"} italic p-3 text-center`}>No alerts at this time</p>
-            )}
+            <AnimatePresence>
+              {alerts.length > 0 ? (
+                <motion.ul className="space-y-3">
+                  {alerts.map((alert) => (
+                    <motion.li 
+                      key={alert.id} 
+                      className={`p-3 ${themeClasses.alertBg} rounded-lg border-l-4 ${themeClasses.alertBorder} flex gap-2`}
+                      variants={alertVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                    >
+                      <AlertCircle size={20} className="text-red-500 shrink-0 mt-1" />
+                      <div>
+                        <p className="text-sm">{alert.message}</p>
+                        <p className={`text-xs ${darkMode ? "text-gray-400" : "text-gray-500"} mt-1`}>{alert.time}</p>
+                      </div>
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              ) : (
+                <motion.p 
+                  className={`${darkMode ? "text-gray-400" : "text-gray-500"} italic p-3 text-center`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                >
+                  No alerts at this time
+                </motion.p>
+              )}
+            </AnimatePresence>
             
-            <div className={`mt-4 pt-4 border-t ${themeClasses.border}`}>
+            <motion.div 
+              className={`mt-4 pt-4 border-t ${themeClasses.border}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
               <h3 className="font-medium mb-3">Latest News</h3>
               <ul className="space-y-2">
                 {[
@@ -345,25 +567,42 @@ export default function HomePage() {
                   "Crypto regulation framework proposed in Congress",
                   "New DeFi platform launches with record TVL"
                 ].map((item, idx) => (
-                  <li key={idx} className={`text-sm p-2 rounded-lg ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"} cursor-pointer transition-colors`}>
+                  <motion.li 
+                    key={idx} 
+                    className={`text-sm p-2 rounded-lg ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"} cursor-pointer transition-colors`}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    whileHover={{ x: 5 }}
+                  >
                     {item}
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
           </div>
           <Link href="/news">
-            <button className={`mt-6 px-4 py-3 ${themeClasses.button} rounded-lg text-white w-full font-medium transition-transform hover:scale-105`}>
+            <motion.button 
+              className={`mt-6 px-4 py-3 ${themeClasses.button} rounded-lg text-white w-full font-medium`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
               Go to News
-            </button>
+            </motion.button>
           </Link>
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
       {/* Quick Actions Section */}
-      <section className="text-center mt-8 space-y-4">
+      <motion.section 
+        className="text-center mt-8 space-y-4"
+        variants={itemVariants}
+      >
         <h3 className="text-xl font-medium">Quick Actions</h3>
-        <div className="flex flex-wrap justify-center gap-3">
+        <motion.div 
+          className="flex flex-wrap justify-center gap-3"
+          variants={containerVariants}
+        >
           {[
             { href: "/whether", icon: <CloudRain size={20} />, label: "Weather" },
             { href: "/crypto", icon: <TrendingUp size={20} />, label: "Crypto" },
@@ -372,27 +611,36 @@ export default function HomePage() {
           ].map((action, idx) => (
             action.href ? (
               <Link href={action.href} key={idx}>
-                <button className={`px-6 py-3 ${themeClasses.button} rounded-xl text-white flex items-center gap-2 shadow-lg hover:shadow-xl transition-all hover:scale-105`}>
+                <motion.button 
+                  className={`px-6 py-3 ${themeClasses.button} rounded-xl text-white flex items-center gap-2 shadow-lg`}
+                  whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                  whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                >
                   {action.icon}
                   <span>{action.label}</span>
-                </button>
+                </motion.button>
               </Link>
             ) : (
-              <button 
+              <motion.button 
                 key={idx}
                 onClick={action.onClick}
-                className={`px-6 py-3 ${themeClasses.button} rounded-xl text-white flex items-center gap-2 shadow-lg hover:shadow-xl transition-all hover:scale-105`}
+                className={`px-6 py-3 ${themeClasses.button} rounded-xl text-white flex items-center gap-2 shadow-lg`}
+                whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
               >
                 {action.icon}
                 <span>{action.label}</span>
-              </button>
+              </motion.button>
             )
           ))}
-        </div>
-      </section>
-
-      {/* Footer */}
-     
-    </main>
+        </motion.div>
+      </motion.section>
+    </motion.main>
   );
 }
