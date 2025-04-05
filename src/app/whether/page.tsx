@@ -93,7 +93,7 @@ const WeatherInfo = () => {
       );
       setSearchedCity(response.data);
       setIsSearching(false);
-    } catch {
+    } catch (err) {
       setError("City not found. Please try another location.");
       setIsSearching(false);
       setSearchedCity(null);
@@ -153,7 +153,7 @@ const WeatherInfo = () => {
 
   useEffect(() => {
     fetchAllWeather();
-  });
+  }, [selectedUnit]);
 
   if (loading && !searchedCity) {
     return (

@@ -69,7 +69,7 @@ export default function HomePage() {
       clearInterval(interval);
       clearTimeout(loadingTimer);
     };
-  });
+  }, [selectedCity]);
 
   // Generate mock chart data
   const generateChartData = () => {

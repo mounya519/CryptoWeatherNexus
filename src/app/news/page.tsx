@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import Image from 'next/image';
 
 import { 
   Search, Globe, Bookmark, Share2, Clock, 
@@ -11,15 +10,15 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function NewsPage() {
-  const [news, setNews] = useState<Article[]>([]);
+  const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   const [category, setCategory] = useState('top');
   const [language, setLanguage] = useState('en');
   const [searchQuery, setSearchQuery] = useState('');
-  const [savedArticles, setSavedArticles] = useState<Article[]>([]);
+  const [savedArticles, setSavedArticles] = useState([]);
   const [activeTab, setActiveTab] = useState('all');
-  const [expandedArticle, setExpandedArticle] = useState<number | null>(null);
+  const [expandedArticle, setExpandedArticle] = useState(null);
 
   const API_KEY = 'pub_78156b7370b86c7c44609acd69323a2e7b5a4';
   
@@ -79,31 +78,20 @@ export default function NewsPage() {
     { code: 'it', name: 'Italiano' }
   ];
 
-interface Article {
-    link: string;
-    title: string;
-    description?: string;
-    content?: string;
-    image_url?: string;
-    source_id?: string;
-    pubDate: string;
-    category?: string[];
-}
-
-const toggleSaveArticle = (article: Article): void => {
-    setSavedArticles((prev: Article[]) => {
-        const isSaved = prev.some((a: Article) => a.link === article.link);
-        return isSaved 
-            ? prev.filter((a: Article) => a.link !== article.link) 
-            : [...prev, article];
+  const toggleSaveArticle = (article) => {
+    setSavedArticles(prev => {
+      const isSaved = prev.some(a => a.link === article.link);
+      return isSaved 
+        ? prev.filter(a => a.link !== article.link) 
+        : [...prev, article];
     });
-};
+  };
 
-  const toggleExpandArticle = (index: number) => {
+  const toggleExpandArticle = (index) => {
     setExpandedArticle(expandedArticle === index ? null : index);
   };
 
-  const shareArticle = async (article: Article) => {
+  const shareArticle = async (article) => {
     try {
       await navigator.share({
         title: article.title,
@@ -122,7 +110,7 @@ const toggleSaveArticle = (article: Article): void => {
     ? savedArticles 
     : news.filter(article => 
         activeTab === 'all' || 
-        (article.category && article.category.includes(activeTab as string))
+        (article.category && article.category.includes(activeTab))
       );
 
   return (
@@ -261,13 +249,13 @@ const toggleSaveArticle = (article: Article): void => {
                 <div className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full flex flex-col">
                   {article.image_url ? (
                     <div className="relative h-48 overflow-hidden">
-                      <Image 
+                      <img 
                         src={article.image_url} 
                         alt={article.title || 'News image'} 
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).onerror = null;
-                          (e.target as HTMLImageElement).src = 'https://via.placeholder.com/600x400?text=No+Image';
+                          e.target.onerror = null;
+                          e.target.src = 'https://via.placeholder.com/600x400?text=No+Image';
                         }}
                       />
                       <div className="absolute top-2 right-2 flex gap-1">
