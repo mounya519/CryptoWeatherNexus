@@ -14,9 +14,9 @@ export default function HomePage() {
   const [weatherCondition, setWeatherCondition] = useState("Clear");
   const [loading, setLoading] = useState(true);
   const [darkMode, setDarkMode] = useState(false); // Default to light mode
-  const [chartData, setChartData] = useState([]);
-  const [selectedCity, setSelectedCity] = useState("New York");
-  const [alerts, setAlerts] = useState([]);
+  const [chartData, setChartData] = useState<{ time: string; btc: number }[]>([]);
+  const [selectedCity, setSelectedCity] = useState<keyof typeof weatherData>("New York");
+  const [alerts, setAlerts] = useState<{ id: number; message: string; time: string }[]>([]);
 
   // Weather data for different cities
   const cities = ["New York", "London", "Tokyo", "Sydney"];
@@ -89,7 +89,7 @@ export default function HomePage() {
   };
 
   // Update chart data with new values
-  const updateChartData = (newPrice) => {
+  const updateChartData = (newPrice: number) => {
     const newChartData = [...chartData.slice(1), {
       time: `${new Date().getHours()}:${new Date().getMinutes().toString().padStart(2, '0')}`,
       btc: newPrice
@@ -117,7 +117,7 @@ export default function HomePage() {
   };
 
   // Handle city selection
-  const handleCityChange = (city) => {
+  const handleCityChange = (city: keyof typeof weatherData) => {
       setSelectedCity(city);
   };
 
@@ -136,7 +136,7 @@ export default function HomePage() {
   };
 
   // Get weather icon based on condition
-  const getWeatherIcon = (condition) => {
+  const getWeatherIcon = (condition: string) => {
     switch (condition.toLowerCase()) {
       case 'rainy':
         return <CloudRain size={24} className={darkMode ? "text-blue-400" : "text-blue-600"} />;
