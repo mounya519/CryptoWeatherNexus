@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ReactElement } from "react";
 import axios from "axios";
 import { 
   MapPin, Sun, CloudRain, CloudSnow, Cloud, 
@@ -470,7 +470,7 @@ const WeatherDetailCard = ({
   value,
   color
 }: {
-  icon: JSX.Element;
+  icon: ReactElement;
   title: string;
   value: string;
   color: string;
